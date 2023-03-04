@@ -1,0 +1,2 @@
+openai
+line-bot-sdk
