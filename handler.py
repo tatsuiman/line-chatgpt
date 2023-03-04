@@ -27,8 +27,8 @@ def lambda_handler(event, context):
     # Extract input text from the event
     try:
         event_body = json.loads(event["body"])
-        input_text = event_body["events"][0]["message"]["text"]
         user_id = event_body["events"][0]["source"]["userId"]
+        input_text = event_body["events"][0]["message"]["text"]
 
         # Check if user is in the memory cache
         if user_id not in memory:
@@ -40,15 +40,17 @@ def lambda_handler(event, context):
             past_messages.append({"role": "system", "content": "あなたは役に立つアシスタントです。"})
         past_messages.append({"role": "user", "content": input_text})
 
-        # Use OpenAI to generate a response
-        response = openai.ChatCompletion.create(model="gpt-3.5-turbo", messages=past_messages)
-        output_text = response["choices"][0]["message"]["content"]
-        past_messages.append({"role": "assistant", "content": output_text})
-        memory[user_id]["messages"] = past_messages
+        if "ください" in input_text or "？" in input_text or "?" in input_text:
+            # Use OpenAI to generate a response
+            response = openai.ChatCompletion.create(model="gpt-3.5-turbo", messages=past_messages)
+            output_text = response["choices"][0]["message"]["content"]
+            past_messages.append({"role": "assistant", "content": output_text})
 
-        # Send the response message back to LINE
-        reply_token = event_body["events"][0]["replyToken"]
-        line_bot_api.reply_message(reply_token, TextSendMessage(text=output_text))
+            # Send the response message back to LINE
+            reply_token = event_body["events"][0]["replyToken"]
+            line_bot_api.reply_message(reply_token, TextSendMessage(text=output_text))
+
+        memory[user_id]["messages"] = past_messages
 
     except Exception as e:
         logger.exception(e)
