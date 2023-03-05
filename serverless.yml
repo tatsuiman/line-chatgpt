@@ -1,14 +1,18 @@
 service: line-chatgpt
+useDotenv: true
 
 plugins:
-  - serverless-dotenv-plugin
   - serverless-python-requirements
   - serverless-api-gateway-throttling
+
 provider:
   name: aws
   runtime: python3.9
   region: ap-northeast-1
   stage: ${opt:stage, 'dev'}
+  timeout: 30
+  memorySize: 254
+  logRetentionInDays: 3
 
 functions:
   openai-function:
@@ -16,6 +20,8 @@ functions:
     environment:
       OPENAI_API_KEY: ${env:OPENAI_API_KEY}
       LINE_CHANNEL_ACCESS_TOKEN: ${env:LINE_CHANNEL_ACCESS_TOKEN}
+      GOOGLE_CSE_ID: ${env:GOOGLE_CSE_ID}
+      GOOGLE_API_KEY: ${env:GOOGLE_API_KEY}
     events:
       - http:
           path: /chatgpt

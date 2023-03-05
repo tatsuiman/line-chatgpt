@@ -1,2 +1,5 @@
 openai
 line-bot-sdk
+langchain
+google-api-python-client
+requests

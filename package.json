@@ -1,14 +1,11 @@
 {
-  "name": "wsauth0",
+  "name": "line-chatgpt",
   "description": "",
   "version": "0.1.0",
   "devDependencies": {
     "serverless": "^3.22.0",
-    "serverless-api-gateway-throttling": "^2.0.2",
-    "serverless-domain-manager": "^6.2.0",
-    "serverless-dotenv-plugin": "^4.0.2",
-    "serverless-dynamodb-autoscaling": "^0.6.2",
     "serverless-plugin-utils": "^0.2.0",
+    "serverless-api-gateway-throttling": "^2.0.2",
     "serverless-python-requirements": "^6.0.0"
   }
 }
